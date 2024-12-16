@@ -10,11 +10,12 @@ const Project = sequelize.define(
         allowNull: false,
         unique: true
       },
-      
-      displayCode: {
+
+      porjectCode : {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4
       },
+      
       propertyType : {
         type: DataTypes.STRING,
         allowNull: false,

@@ -9,9 +9,12 @@ const Address = sequelize.define(
         type: DataTypes.INTEGER,
         primaryKey: true,
       },
-      street: {
+      street1: {
         type: DataTypes.STRING,
         allowNull : false
+      },
+      street2: {
+        type: DataTypes.STRING,
       },
       city: {
         type: DataTypes.STRING,
