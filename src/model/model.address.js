@@ -4,7 +4,6 @@ import sequelize from '../config/db.js';
 const Address = sequelize.define(
     'addresses',
     {
-
        projectId: {
         type: DataTypes.INTEGER,
         primaryKey: true,

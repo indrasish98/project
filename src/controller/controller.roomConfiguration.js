@@ -1,5 +1,5 @@
 import RoomConfiguration from "../model/model.roomConfiguration.js";
-
+import CustomError from "../utis/CustomError.js";
 
 
 // add payment plan
@@ -11,7 +11,7 @@ const addRoom = async (req,res,next)=>{
  
     if ( !roomType || !bedroomNumber  )
     {
-            next( new CustomError( 400 , " Please fill all required field..."));
+        return next( new CustomError(" Please fill all required field",400));
     }
 
     try {
@@ -21,6 +21,7 @@ const addRoom = async (req,res,next)=>{
         return res.status(200).json({
             success : true,
             message : 'successfully added room configuration in project.',
+            data : result
         })
 
     } catch (error) {
@@ -35,7 +36,6 @@ const addRoom = async (req,res,next)=>{
 const deleteRoom = async (req,res,next)=>{
   
     const { roomId } = req.params;
-
    
     try {
 
@@ -90,16 +90,28 @@ const updateRoom = async ( req,res,next)=>{
     const { roomId } = req.params;
 
     const { roomType , bedroomNumber } = req.body;
+
+    if ( !roomType || !bedroomNumber  )
+        {
+            return next( new CustomError(" Please fill all required field",400));
+        }
+    
  
       try {
 
-        await PaymentPlan.update({roomType,bedroomNumber},{where : { id : roomId}})
+        const [ result ] = await RoomConfiguration.update({roomType,bedroomNumber},{where : { id : roomId}})
         
+        if ( result == 1 ){
+            const data = await RoomConfiguration.findByPk(roomId);
+            return res.status(200).json({
+                success : true,
+                message : 'successfully updated room configuration...',
+                data
+            })
 
-        return res.status(200).json({
-            success : true,
-            message : 'successfully updated payment plan...',
-        })
+        }else {
+            return next( new CustomError("Not updated!. please try again.",500));
+        }
 
     } catch (error) {
 

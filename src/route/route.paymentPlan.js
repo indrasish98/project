@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { addPaymentPlan, deletePaymentPlan, getPaymentPlanByProjectId, updatePaymentPlan } from "../controller/controller.paymentPlan.js";
+import { 
+    addPaymentPlan,
+    deletePaymentPlan,
+    getPaymentPlanByProjectId,
+    updatePaymentPlan 
+} from "../controller/controller.paymentPlan.js";
 
 const paymentPlanRoute = Router();
 

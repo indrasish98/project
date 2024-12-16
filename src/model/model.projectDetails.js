@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes, Model }  from 'sequelize';
+import {  DataTypes }  from 'sequelize';
 import sequelize from '../config/db.js';
 
 const projectDetail = sequelize.define(
@@ -16,7 +16,7 @@ const projectDetail = sequelize.define(
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      areaDetails : {
+      areaDetail : {
         type : DataTypes.INTEGER,
         allowNull: false,
       },

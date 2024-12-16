@@ -15,7 +15,7 @@ const createProject = async (req,res,next)=>{
 
     if ( !project , !address ,  !projectDetail  ){
 
-        next( new CustomError( 400 , " Please fill all required field..."));
+        return next( new CustomError( " Please fill all required field...",400));
 
     }
 
@@ -23,21 +23,21 @@ const createProject = async (req,res,next)=>{
 
     const { street1 , street2, city , state , country } = address; 
 
-    const {  room, floor, areaDetails, cost } = projectDetail;
+    const {  room, floor, areaDetail, cost } = projectDetail;
     
-    if ( !projectName || !propertyType || !street1 || !city || !street || !state  || !country 
-        || !room || !floor || !areaDetails || !cost  )
-        {
-            next( new CustomError( 400 , " Please fill all required field..."));
+    if ( !projectName || !propertyType || !street1 || !city  || !state  || !country 
+        || !room || !floor || !areaDetail || !cost  )
+    {
+            return next( new CustomError( " Please fill all required field..." , 400 ));
     }
-
+    
     try {
 
         const existingProject =  await Project.findOne({ where: { projectName } });
 
         if( existingProject ){
 
-            next( new CustomError( 403 , " User already exist..."));
+            return next( new CustomError( " User already exist.",403 ));
 
         }
 
@@ -75,7 +75,6 @@ const createProject = async (req,res,next)=>{
             await RoomConfiguration.bulkCreate(modifiedRoomConfiguration);
         }
 
-
         if( siteEmployee && siteEmployee.length > 0 ) {
 
             const modifiedSiteEmployee = [];
@@ -91,6 +90,7 @@ const createProject = async (req,res,next)=>{
         return res.status(200).json({
             success : true,
             message : 'successfully created data in project.',
+            data : project
             
         })
 
@@ -105,13 +105,11 @@ const createProject = async (req,res,next)=>{
 const updateproject = async(req,res,next)=>{
     
     const { projectId } = req.params;
-    
+   
     const { projectName, propertyType } = req.body;
 
-    if ( !projectName || !propertyType ){
-
-        return next(new CustomError("please fill required field.", 400));
-
+    if ( !projectName && !propertyType ){
+         next(new CustomError("please fill required field.", 400));
     }
 
     try {
@@ -119,30 +117,23 @@ const updateproject = async(req,res,next)=>{
         const project = await Project.findByPk(projectId);
 
         if( projectName ){
-
             project.projectName = projectName;
-            
         }
 
         if( propertyType ){
-
             project.propertyType = propertyType;
-
         }
 
         await project.save();
-        
 
         return res.status(200).json({
             success: true,
             message: 'Successfully updated ...',
+            data : project
         });
 
     } catch (error) {
-
         console.log("The error is: ", error);
-        return next(new CustomError("Failed to update .", 500));
-
     }
 }
 

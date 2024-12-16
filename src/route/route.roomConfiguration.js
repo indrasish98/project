@@ -4,14 +4,14 @@ import {
     deleteRoom, 
     getAllRoomByProjectId, 
     updateRoom 
-} from "../controller/controller.paymentPlan.js";
+} from "../controller/controller.roomConfiguration.js";
 
-const paymentPlanRoute = Router();
+const roomConfigurationRoute = Router();
 
-paymentPlanRoute.post('/add/:projectId',addRoom);
-paymentPlanRoute.get('/get/:projectId',getAllRoomByProjectId);
-paymentPlanRoute.delete('/delete/:roomId',deleteRoom);
-paymentPlanRoute.put('/update/:roomId',updateRoom);
+roomConfigurationRoute.post('/add/:projectId',addRoom);
+roomConfigurationRoute.get('/get/:projectId',getAllRoomByProjectId);
+roomConfigurationRoute.delete('/delete/:roomId',deleteRoom);
+roomConfigurationRoute.put('/update/:roomId',updateRoom);
 
 
-export default paymentPlanRoute;
+export default roomConfigurationRoute;

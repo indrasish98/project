@@ -2,7 +2,7 @@ class CustomError extends Error {
     
     statusCode;
     
-    constructor(statusCode,message){
+    constructor(message,statusCode){
 
         super(message);
         this.statusCode = statusCode;

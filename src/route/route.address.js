@@ -4,6 +4,6 @@ import {  getAddressByProjectId, updateAddress } from "../controller/controller.
 const addressRoute = Router();
 
 addressRoute.get('/get/:projectId', getAddressByProjectId);
-addressRoute.put('/update/:addressId', updateAddress);
+addressRoute.put('/update/:projectId', updateAddress);
 
 export default addressRoute;

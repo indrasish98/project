@@ -9,7 +9,7 @@ const Employee = sequelize.define(
         type: DataTypes.STRING,
         allowNull: false,
       },
-      LastName: {
+      lastName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -19,7 +19,6 @@ const Employee = sequelize.define(
       },
       email : {
         type : DataTypes.STRING,
-        allowNull : false
       },
       workPhone : {
         type : DataTypes.INTEGER,

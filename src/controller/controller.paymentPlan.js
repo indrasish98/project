@@ -1,5 +1,5 @@
-import { where } from "sequelize";
 import PaymentPlan from "../model/model.paymentplan.js";
+import CustomError from "../utis/CustomError.js";
 
 
 
@@ -12,7 +12,7 @@ const addPaymentPlan = async (req,res,next)=>{
  
     if ( !stage || !charge  )
     {
-            next( new CustomError( 400 , " Please fill all required field..."));
+           return next( new CustomError( " Please fill all required field...",400));
     }
 
     try {
@@ -24,6 +24,7 @@ const addPaymentPlan = async (req,res,next)=>{
         return res.status(200).json({
             success : true,
             message : 'successfully added payment plan in project.',
+            data
         })
 
     } catch (error) {
@@ -62,6 +63,7 @@ const deletePaymentPlan = async (req,res,next)=>{
 
 //get all payment plan on the basis of particular project Id 
 const getPaymentPlanByProjectId = async ( req,res,next)=>{
+
     const { projectId } = req.params;
  
       try {
@@ -92,16 +94,30 @@ const updatePaymentPlan = async ( req,res,next)=>{
     const { paymentPlanId } = req.params;
 
     const { stage , charge } = req.body;
+
+    if ( !stage || !charge  )
+    {
+        return next( new CustomError( " Please fill all required field...",400));
+    }
  
       try {
 
-        await PaymentPlan.update({stage,charge},{where : { id : paymentPlanId}})
+        const [ result ] = await PaymentPlan.update({stage,charge},{where : { id : paymentPlanId}})
+
+        if ( result == 1 ){
+            const data = await PaymentPlan.findByPk(paymentPlanId);
+            return res.status(200).json({
+                success : true,
+                message : 'successfully updated payment plan...',
+                data
+            })
+
+        }else {
+            return next( new CustomError("Not updated!. please try again.",500));
+        }
         
 
-        return res.status(200).json({
-            success : true,
-            message : 'successfully updated payment plan...',
-        })
+       
 
     } catch (error) {
 

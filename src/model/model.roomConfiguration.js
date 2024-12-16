@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes, Model }  from 'sequelize';
+import { DataTypes }  from 'sequelize';
 import sequelize from '../config/db.js';
 
 const RoomConfiguration = sequelize.define(
@@ -7,15 +7,14 @@ const RoomConfiguration = sequelize.define(
        projectId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        primaryKey: true,
       },
       roomType: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull : false
       },
       bedroomNumber: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull : false
       },
       
       

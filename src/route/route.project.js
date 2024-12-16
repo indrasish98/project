@@ -3,7 +3,7 @@ import { createProject, updateproject } from "../controller/controller.project.j
 
 const projectRouter = Router();
 
-projectRouter.post('/add',createProject);
+projectRouter.post('/create',createProject);
 projectRouter.patch('/update/:projectId',updateproject);
 
 export default projectRouter;
