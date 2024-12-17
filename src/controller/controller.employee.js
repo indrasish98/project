@@ -14,12 +14,13 @@ const addEmployee = async (req, res, next) => {
     try {
 
         let result = await Employee.create({ firstName, lastName, solution, email, workPhone, mobile, communicationChannel, projectId });
-        const data = result.toJSON();
+        
+        const data = await Employee.findByPk(result.id,{attributes: { exclude: ['updatedAt','createdAt'] }})
 
         return res.status(200).json({
             success: true,
             message: 'Successfully added employee to project.',
-            data: data
+            data
         });
 
     } catch (error) {
@@ -64,7 +65,8 @@ const getEmployeeByProjectId = async (req, res, next) => {
         let result = await Employee.findAll({
             where: {
                 projectId
-            }
+            },
+            attributes: { exclude: ['updatedAt','createdAt'] }
         });
 
         return res.status(200).json({
@@ -90,11 +92,14 @@ const updateEmployee = async (req, res, next) => {
     }
 
     try {
-        await Employee.update({ firstName, lastName, solution, email, workPhone, mobile, communicationChannel }, { where: { id: employeeId } });
+        const [result] = await Employee.update({ firstName, lastName, solution, email, workPhone, mobile, communicationChannel }, { where: { id: employeeId } });
+
+        const data = await Employee.findByPk(employeeId,{attributes: { exclude: ['updatedAt','createdAt'] }})
 
         return res.status(200).json({
             success: true,
             message: 'Successfully updated employee...',
+            data
         });
 
     } catch (error) {

@@ -8,12 +8,12 @@ const getAmenityByProjectId = async (req, res, next) => {
 
     try {
 
-        let result = await Amenity.findOne({where:{projectId}});
+        let data = await Amenity.findOne({where:{projectId},attributes: { exclude: ['updatedAt','createdAt'] }});
 
         return res.status(200).json({
             success: true,
             message: 'Fetching  all amenities for this project.',
-            data: result
+            data
         });
 
     } catch (error) {
@@ -33,7 +33,7 @@ const updateAmenity = async (req, res, next) => {
 
          if( result == 1 ){
 
-            const data = await Amenity.findOne({where:{projectId}})
+            const data = await Amenity.findOne({where:{projectId},attributes: { exclude: ['updatedAt','createdAt'] }})
             
             return res.status(200).json({
                 success: true,

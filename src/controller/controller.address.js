@@ -8,12 +8,12 @@ const getAddressByProjectId = async (req, res, next) => {
 
     try {
 
-        let result = await Address.findByPk(projectId);
+        let data = await Address.findByPk(projectId,{attributes: { exclude: ['updatedAt','createdAt'] }});
 
         return res.status(200).json({
             success: true,
             message: 'Fetching  addresses for this project.',
-            data: result
+            data
         });
 
     } catch (error) {
@@ -37,7 +37,7 @@ const updateAddress = async (req, res, next) => {
         
         if( result == 1 ){
 
-            const data = await Address.findOne({where:{projectId}})
+            const data = await Address.findOne({where:{projectId},attributes: { exclude: ['updatedAt','createdAt'] }})
             return res.status(200).json({
                 success: true,
                 message: 'Successfully updated address.',
@@ -49,7 +49,6 @@ const updateAddress = async (req, res, next) => {
             return next( new CustomError("Not updated!. please try again.",500));
         }
         
-
     } catch (error) {
 
         console.log("The error is: ", error);

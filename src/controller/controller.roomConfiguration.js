@@ -18,10 +18,12 @@ const addRoom = async (req,res,next)=>{
 
         let result =  await RoomConfiguration.create({roomType,bedroomNumber,projectId});
 
+        const data = await RoomConfiguration.findByPk(result.id,{attributes: { exclude: ['updatedAt','createdAt'] }})
+
         return res.status(200).json({
             success : true,
             message : 'successfully added room configuration in project.',
-            data : result
+            data 
         })
 
     } catch (error) {
@@ -67,7 +69,8 @@ const getAllRoomByProjectId = async ( req,res,next)=>{
         let result =  await RoomConfiguration.findAll({
             where : {
                 projectId
-            }
+            },
+            attributes: { exclude: ['updatedAt','createdAt'] }
         });
         
         return res.status(200).json({
@@ -102,7 +105,7 @@ const updateRoom = async ( req,res,next)=>{
         const [ result ] = await RoomConfiguration.update({roomType,bedroomNumber},{where : { id : roomId}})
         
         if ( result == 1 ){
-            const data = await RoomConfiguration.findByPk(roomId);
+            const data = await RoomConfiguration.findByPk(roomId,{attributes: { exclude: ['updatedAt','createdAt'] }});
             return res.status(200).json({
                 success : true,
                 message : 'successfully updated room configuration...',

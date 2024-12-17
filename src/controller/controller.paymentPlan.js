@@ -19,7 +19,12 @@ const addPaymentPlan = async (req,res,next)=>{
 
         let result =  await PaymentPlan.create({stage,charge,projectId});
 
-        const data = result.toJSON();
+        const data = await PaymentPlan.findOne({
+            where: { id: result.id },
+            attributes: ['id','projectId','stage', 'charge'] 
+        });
+
+       
 
         return res.status(200).json({
             success : true,
@@ -68,16 +73,15 @@ const getPaymentPlanByProjectId = async ( req,res,next)=>{
  
       try {
 
-        let result =  await PaymentPlan.findAll({
-            where : {
-                projectId
-            }
+        const data = await PaymentPlan.findAll({
+            where: { projectId },
+            attributes: ['id','projectId','stage', 'charge'] 
         });
         
         return res.status(200).json({
             success : true,
             message : 'fetching all payment plans for this project.',
-            data : result
+            data 
         })
 
     } catch (error) {
@@ -105,7 +109,7 @@ const updatePaymentPlan = async ( req,res,next)=>{
         const [ result ] = await PaymentPlan.update({stage,charge},{where : { id : paymentPlanId}})
 
         if ( result == 1 ){
-            const data = await PaymentPlan.findByPk(paymentPlanId);
+            const data = await PaymentPlan.findByPk(paymentPlanId,{attributes: ['id','projectId','stage', 'charge']} );
             return res.status(200).json({
                 success : true,
                 message : 'successfully updated payment plan...',

@@ -41,9 +41,12 @@ const createProject = async (req,res,next)=>{
 
         }
 
-        const result = await Project.create({projectName,propertyType});
-
-        const project = result.toJSON();
+        const project = await Project.create({projectName,propertyType});
+        
+        const data = await Project.findOne({
+            where: { id: project.id },
+            attributes: ['id','projectName', 'projectCode','propertyType'] 
+        });
 
         await Address.create({...address,projectId : project.id});
 
@@ -90,7 +93,7 @@ const createProject = async (req,res,next)=>{
         return res.status(200).json({
             success : true,
             message : 'successfully created data in project.',
-            data : project
+            data 
             
         })
 
@@ -114,7 +117,10 @@ const updateproject = async(req,res,next)=>{
 
     try {
 
-        const project = await Project.findByPk(projectId);
+        const project = await Project.findOne({
+            where: { id: projectId },
+            attributes: ['id','projectName', 'projectCode','propertyType'] 
+        });
 
         if( projectName ){
             project.projectName = projectName;
