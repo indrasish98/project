@@ -1,5 +1,8 @@
 import RoomConfiguration from "../model/model.roomConfiguration.js";
-import CustomError from "../utis/CustomError.js";
+import CustomError from "../utils/CustomError.js";
+import { validate } from "../utils/validation.js";
+import { roomConfigurationSchema } from "../validation/project/validation.roomConfiguration.js";
+
 
 
 // add payment plan
@@ -13,6 +16,8 @@ const addRoom = async (req,res,next)=>{
     {
         return next( new CustomError(" Please fill all required field",400));
     }
+
+   validate(next,roomConfigurationSchema,req.body);
 
     try {
 
@@ -98,6 +103,8 @@ const updateRoom = async ( req,res,next)=>{
         {
             return next( new CustomError(" Please fill all required field",400));
         }
+
+     validate(next,roomConfigurationSchema,req.body);
     
  
       try {

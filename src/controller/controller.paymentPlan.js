@@ -1,5 +1,7 @@
 import PaymentPlan from "../model/model.paymentplan.js";
-import CustomError from "../utis/CustomError.js";
+import CustomError from "../utils/CustomError.js";
+import { validate } from "../utils/validation.js";
+import { paymentPlanSchema } from "../validation/project/validation.paymentPlan.js";
 
 
 
@@ -14,6 +16,9 @@ const addPaymentPlan = async (req,res,next)=>{
     {
            return next( new CustomError( " Please fill all required field...",400));
     }
+
+    validate(next,paymentPlanSchema,req.body);
+
 
     try {
 
@@ -103,6 +108,8 @@ const updatePaymentPlan = async ( req,res,next)=>{
     {
         return next( new CustomError( " Please fill all required field...",400));
     }
+
+    validate(next,paymentPlanSchema,req.body);
  
       try {
 

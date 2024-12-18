@@ -1,5 +1,6 @@
-import { DataTypes, DATE } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
+
 
 const Project = sequelize.define(
   'projects',
@@ -9,10 +10,7 @@ const Project = sequelize.define(
       allowNull: false,
       unique: true
     },
-    projectCode: {
-      type: DataTypes.STRING,
-      unique : true
-    },
+  
     propertyType: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -20,12 +18,7 @@ const Project = sequelize.define(
   },
   {
     freezeTableName: true,
-    hooks: {
-      beforeCreate: (project) => {
-        let code = Date.now() +project.id;
-        project.projectCode =  code.toString();
-      }
-    }
+    
   }
 );
 

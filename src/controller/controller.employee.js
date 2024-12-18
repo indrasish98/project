@@ -1,5 +1,7 @@
 import Employee from "../model/model.employee.js";
-import CustomError from "../utis/CustomError.js";
+import CustomError from "../utils/CustomError.js";
+import { validate } from "../utils/validation.js";
+import { employeeSchema } from "../validation/project/validation.employee.js";
 
 // add employee
 const addEmployee = async (req, res, next) => {
@@ -10,6 +12,8 @@ const addEmployee = async (req, res, next) => {
     if (!firstName || !lastName || !solution  || !workPhone || !mobile || !communicationChannel) {
         return next(new CustomError("Please fill all required fields...", 400));
     }
+
+    validate(next,employeeSchema,req.body);
 
     try {
 
@@ -90,6 +94,8 @@ const updateEmployee = async (req, res, next) => {
     if (!firstName || !lastName || !solution  || !workPhone || !mobile || !communicationChannel) {
         return next(new CustomError("Please fill all required fields...", 400));
     }
+
+    validate(next,employeeSchema,req.body);
 
     try {
         const [result] = await Employee.update({ firstName, lastName, solution, email, workPhone, mobile, communicationChannel }, { where: { id: employeeId } });

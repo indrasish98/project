@@ -5,7 +5,7 @@ import sequelize from "./config/db.js";
 
 const PORT = envVariable.PORT || 5000;
 
-sequelize.sync( ).then(()=>{
+sequelize.sync().then(()=>{
     console.log("databases connected successfully...");
     
     app.listen(PORT,()=>{

@@ -1,5 +1,5 @@
 import Amenity from "../model/model.amenity.js";
-import CustomError from "../utis/CustomError.js";
+import CustomError from "../utils/CustomError.js";
 
 // get  amenities based on project ID
 const getAmenityByProjectId = async (req, res, next) => {
