@@ -8,13 +8,13 @@ import CustomError from "../utils/CustomError.js";
 const addPaymentPlan = async (req,res,next)=>{
 
     const { planNameId } = req.params;
+    const { projectId } = req.query;
 
     try {
 
-        let result =  await PaymentPlan.create({...req.body,planNameId});
+        let result =  await PaymentPlan.create({...req.body,planNameId,projectId});
 
-        const data = await PaymentPlan.findOne({
-            where: { id: result.id },
+        const data = await PaymentPlan.findByPk(result.id ,{
             attributes: ['id','planNameId','stage', 'charge'] 
         });
 

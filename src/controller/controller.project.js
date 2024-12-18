@@ -1,6 +1,7 @@
 import Address from "../model/model.address.js";
 import Amenity from "../model/model.amenity.js";
 import Employee from "../model/model.employee.js";
+import PaymentPlan from "../model/model.paymentplan.js";
 import PlanName from "../model/model.planName.js";
 import Project from "../model/model.project.js";
 import ProjectDetail from "../model/model.projectDetails.js";
@@ -174,6 +175,13 @@ const deleteProjectByProjectId = async(req,res,next)=>{
     try {
         
         await Project.destroy({where:{id:projectId}});
+        await Address.destroy({where:{projectId}});
+        await Amenity.destroy({where:{projectId}});
+        await ProjectDetail.destroy({where:{projectId}});
+        await Employee.destroy({where:{projectId}});
+        await PlanName.destroy({where:{projectId}});
+        await PaymentPlan.destroy({where:{projectId}});
+
         res.status(200).json({
             success : true,
             message : " project deleted successfully."

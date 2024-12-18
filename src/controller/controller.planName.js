@@ -1,3 +1,4 @@
+import PaymentPlan from "../model/model.paymentplan.js";
 import PlanName from "../model/model.planName.js"
 import CustomError from "../utils/CustomError.js";
 
@@ -50,6 +51,7 @@ export const deleteParticularPlanName = async ( req,res,next)=>{
         
       
          await PlanName.destroy({where:{id:planNameId}});
+         await PaymentPlan.destroy({where:{planNameId}});
         
         res.status(200).json({
             success : true,

@@ -8,6 +8,10 @@ const PaymentPlan = sequelize.define(
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+       projectId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       stage: {
         type: DataTypes.STRING,
         allowNull: false,
