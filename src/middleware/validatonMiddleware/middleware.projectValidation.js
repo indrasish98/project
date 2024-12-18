@@ -4,6 +4,7 @@ import { addressSchema } from "../../validation/project/validation.address.js";
 import { amenitySchema } from "../../validation/project/validation.amenity.js";
 import { employeeSchema } from "../../validation/project/validation.employee.js";
 import { paymentPlanSchema } from "../../validation/project/validation.paymentPlan.js";
+import planNameSchema from "../../validation/project/validation.planName.js";
 import { projectSchema } from "../../validation/project/validation.project.js";
 import { projectDetailSchema } from "../../validation/project/validation.projectDetails.js";
 import { roomConfigurationSchema } from "../../validation/project/validation.roomConfiguration.js";
@@ -175,6 +176,21 @@ export const paymentPlanValidation = async(req,res,next)=>{
 export const amenityValidation = async(req,res,next)=>{
 
     const  { error } =  amenitySchema.validate(req.body);
+
+    if ( error ){
+        const errorMessage = error.details[0].message;
+        const message = makeClearMessage(errorMessage);
+        return next( new CustomError(message,400));
+         
+    }
+
+    next();
+    
+}
+
+export const planNameValidation = async(req,res,next)=>{
+
+    const  { error } =  planNameSchema.validate(req.body);
 
     if ( error ){
         const errorMessage = error.details[0].message;
