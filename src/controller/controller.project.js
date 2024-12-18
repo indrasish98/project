@@ -145,6 +145,7 @@ const updateproject = async(req,res,next)=>{
     }
 }
 
+// fetched project details
 const fetchProjectByProjectId = async(req,res,next)=>{
 
     const { projectId } = req.params;
@@ -152,7 +153,7 @@ const fetchProjectByProjectId = async(req,res,next)=>{
     try {
 
         const data = await Project.findByPk(projectId,{attributes:['id','projectName','propertyType']})
-        
+
         return res.status(200).json({
             success : true,
             message : "project fetched successfully",
@@ -166,8 +167,28 @@ const fetchProjectByProjectId = async(req,res,next)=>{
     }
 }
 
+const deleteProjectByProjectId = async(req,res,next)=>{
+
+    const { projectId } = req.params;
+
+    try {
+        
+        await Project.destroy({where:{id:projectId}});
+        res.status(200).json({
+            success : true,
+            message : " project deleted successfully."
+        })
+
+    } catch (error) {
+
+        console.log("the error is : ",error);
+        
+    }
+}
+
 export {
     createProject,
     updateproject,
-    fetchProjectByProjectId
+    fetchProjectByProjectId,
+    deleteProjectByProjectId
 }
