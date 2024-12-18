@@ -1,7 +1,7 @@
 import Address from "../model/model.address.js";
 import Amenity from "../model/model.amenity.js";
 import Employee from "../model/model.employee.js";
-import PaymentPlan from "../model/model.paymentplan.js";
+import PlanName from "../model/model.planName.js";
 import Project from "../model/model.project.js";
 import ProjectDetail from "../model/model.projectDetails.js";
 import RoomConfiguration from "../model/model.roomConfiguration.js";
@@ -13,7 +13,7 @@ import CustomError from "../utils/CustomError.js"
 //creating a project
 const createProject = async (req,res,next)=>{
   
-    const { project ,  address,  roomConfiguration, projectDetail , amenity , paymentPlan , siteEmployee } = req.body;
+    const { project ,  address,  roomConfiguration, projectDetail , amenity , planName , siteEmployee } = req.body;
       
     const { projectName , propertyType } = project;
 
@@ -40,16 +40,16 @@ const createProject = async (req,res,next)=>{
 
         await Amenity.create({...amenity,projectId : project.id});
       
-        if( paymentPlan && paymentPlan.length > 0 ) {
+        if( planName && planName.length > 0 ) {
 
             const modifiedPaymentPlan = [];
 
-            for (const element of paymentPlan) {
+            for (const element of planName) {
                 let plan = { ...element,projectId:project.id};
                 modifiedPaymentPlan.push(plan);
             }
 
-            await PaymentPlan.bulkCreate(modifiedPaymentPlan);
+            await PlanName.bulkCreate(modifiedPaymentPlan);
         }
 
         if( roomConfiguration && roomConfiguration.length > 0 ) {

@@ -12,7 +12,7 @@ import { roomConfigurationSchema } from "../../validation/project/validation.roo
 export const projectCreationValidation=async(req,res,next)=>{
 
    
-    const { project ,  address,  roomConfiguration, projectDetail , amenity , paymentPlan , siteEmployee } = req.body;
+    const { project ,  address,  roomConfiguration, projectDetail , amenity , planName , siteEmployee } = req.body;
 
     if ( !project , !address ,  !projectDetail  ){
 
@@ -48,11 +48,11 @@ export const projectCreationValidation=async(req,res,next)=>{
     }
    
 
-    if( paymentPlan && paymentPlan.length > 0 ) {
+    if( planName && planName.length > 0 ) {
 
-        for (const element of paymentPlan) {
+        for (const element of planName) {
           
-           const  { error } =  paymentPlanSchema.validate(element);
+           const  { error } =  planNameSchema.validate(element);
 
            if ( error ){
                const errorMessage = error.details[0].message;
