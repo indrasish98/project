@@ -10,7 +10,7 @@ import { roomConfigurationValidation } from "../middleware/validatonMiddleware/m
 const roomConfigurationRoute = Router();
 
 roomConfigurationRoute.post('/add/:projectId',roomConfigurationValidation,addRoom);
-roomConfigurationRoute.get('/get/:projectId',getAllRoomByProjectId);
+roomConfigurationRoute.get('/:projectId',getAllRoomByProjectId);
 roomConfigurationRoute.delete('/delete/:roomId',deleteRoom);
 roomConfigurationRoute.put('/update/:roomId',roomConfigurationValidation,updateRoom);
 

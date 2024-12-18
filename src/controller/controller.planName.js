@@ -1,4 +1,5 @@
 import PlanName from "../model/model.planName.js"
+import CustomError from "../utils/CustomError.js";
 
 export const createPlanName = async ( req,res,next)=>{
     
@@ -68,14 +69,23 @@ export const updatePlanName = async ( req,res,next)=>{
     try {
         
       
-         await PlanName.update(req.body,{where:{id:planNameId}});
-         const data = await PlanName.findByPk(planNameId,{attributes:['id','projectId','planName']});
+         const [ result ] = await PlanName.update(req.body,{where:{id:planNameId}});
+
+         if( result == 1){
+
+            const data = await PlanName.findByPk(planNameId,{attributes:['id','projectId','planName']});
+
+            res.status(200).json({
+                success : true,
+                message : 'successfully updated plan name ',
+                data
+            })
+
+         }else {
+            return next( new CustomError("Sorry! updation failed.",400));
+         }
         
-        res.status(200).json({
-            success : true,
-            message : 'successfully updated plan name ',
-            data
-        })
+        
 
      } catch (error) {
         

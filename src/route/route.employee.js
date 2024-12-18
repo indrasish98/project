@@ -8,7 +8,7 @@ import { employeeValidation } from "../middleware/validatonMiddleware/middleware
 const employeeRoute = Router();
 
 employeeRoute.post('/add/:projectId',employeeValidation, addEmployee);
-employeeRoute.get('/get/:projectId', getEmployeeByProjectId);
+employeeRoute.get('/:projectId', getEmployeeByProjectId);
 employeeRoute.delete('/delete/:employeeId', deleteEmployee);
 employeeRoute.put('/update/:employeeId',employeeValidation,updateEmployee);
 

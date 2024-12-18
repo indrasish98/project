@@ -23,7 +23,7 @@ const createProject = async (req,res,next)=>{
 
         if( existingProject ){
 
-            return next( new CustomError( " User already exist.",403 ));
+            return next( new CustomError( " Project Name already exist.",403 ));
 
         }
 
@@ -145,7 +145,29 @@ const updateproject = async(req,res,next)=>{
     }
 }
 
+const fetchProjectByProjectId = async(req,res,next)=>{
+
+    const { projectId } = req.params;
+
+    try {
+
+        const data = await Project.findByPk(projectId,{attributes:['id','projectName','propertyType']})
+        
+        return res.status(200).json({
+            success : true,
+            message : "project fetched successfully",
+            data
+        })
+
+    } catch (error) {
+
+        console.log("the error is : ",error);
+        
+    }
+}
+
 export {
     createProject,
-    updateproject
+    updateproject,
+    fetchProjectByProjectId
 }

@@ -1,7 +1,6 @@
 import RoomConfiguration from "../model/model.roomConfiguration.js";
 import CustomError from "../utils/CustomError.js";
 
-import { roomConfigurationSchema } from "../validation/project/validation.roomConfiguration.js";
 
 
 
@@ -82,7 +81,6 @@ const getAllRoomByProjectId = async ( req,res,next)=>{
     }
 }
 
-
 //update payment plan according to the payment plan id  
 const updateRoom = async ( req,res,next)=>{
 
@@ -112,7 +110,6 @@ const updateRoom = async ( req,res,next)=>{
         
     }
 }
-
 
 
 export {
