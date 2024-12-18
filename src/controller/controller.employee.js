@@ -1,23 +1,16 @@
 import Employee from "../model/model.employee.js";
 import CustomError from "../utils/CustomError.js";
-import { validate } from "../utils/validation.js";
+
 import { employeeSchema } from "../validation/project/validation.employee.js";
 
 // add employee
 const addEmployee = async (req, res, next) => {
 
     const { projectId } = req.params;
-    const { firstName, lastName, solution, email, workPhone, mobile, communicationChannel } = req.body;
-
-    if (!firstName || !lastName || !solution  || !workPhone || !mobile || !communicationChannel) {
-        return next(new CustomError("Please fill all required fields...", 400));
-    }
-
-    validate(next,employeeSchema,req.body);
 
     try {
 
-        let result = await Employee.create({ firstName, lastName, solution, email, workPhone, mobile, communicationChannel, projectId });
+        let result = await Employee.create({...req.body, projectId });
         
         const data = await Employee.findByPk(result.id,{attributes: { exclude: ['updatedAt','createdAt'] }})
 
@@ -66,7 +59,7 @@ const getEmployeeByProjectId = async (req, res, next) => {
 
     try {
 
-        let result = await Employee.findAll({
+        const data = await Employee.findAll({
             where: {
                 projectId
             },
@@ -76,7 +69,7 @@ const getEmployeeByProjectId = async (req, res, next) => {
         return res.status(200).json({
             success: true,
             message: 'Fetching all employees for this project.',
-            data: result
+            data
         });
 
     } catch (error) {
@@ -89,16 +82,9 @@ const getEmployeeByProjectId = async (req, res, next) => {
 const updateEmployee = async (req, res, next) => {
 
     const { employeeId } = req.params;
-    const { firstName, lastName, solution, email, workPhone, mobile, communicationChannel } = req.body;
-
-    if (!firstName || !lastName || !solution  || !workPhone || !mobile || !communicationChannel) {
-        return next(new CustomError("Please fill all required fields...", 400));
-    }
-
-    validate(next,employeeSchema,req.body);
 
     try {
-        const [result] = await Employee.update({ firstName, lastName, solution, email, workPhone, mobile, communicationChannel }, { where: { id: employeeId } });
+        const [result] = await Employee.update(req.body, { where: { id: employeeId } });
 
         const data = await Employee.findByPk(employeeId,{attributes: { exclude: ['updatedAt','createdAt'] }})
 

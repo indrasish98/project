@@ -1,28 +1,18 @@
 import PaymentPlan from "../model/model.paymentplan.js";
 import CustomError from "../utils/CustomError.js";
-import { validate } from "../utils/validation.js";
+
 import { paymentPlanSchema } from "../validation/project/validation.paymentPlan.js";
 
 
 
 // add payment plan
 const addPaymentPlan = async (req,res,next)=>{
-  
+
     const { projectId } = req.params;
-
-    const { stage , charge } = req.body; 
- 
-    if ( !stage || !charge  )
-    {
-           return next( new CustomError( " Please fill all required field...",400));
-    }
-
-    validate(next,paymentPlanSchema,req.body);
-
 
     try {
 
-        let result =  await PaymentPlan.create({stage,charge,projectId});
+        let result =  await PaymentPlan.create({...req.body,projectId});
 
         const data = await PaymentPlan.findOne({
             where: { id: result.id },
@@ -101,19 +91,10 @@ const getPaymentPlanByProjectId = async ( req,res,next)=>{
 const updatePaymentPlan = async ( req,res,next)=>{
 
     const { paymentPlanId } = req.params;
-
-    const { stage , charge } = req.body;
-
-    if ( !stage || !charge  )
-    {
-        return next( new CustomError( " Please fill all required field...",400));
-    }
-
-    validate(next,paymentPlanSchema,req.body);
  
       try {
 
-        const [ result ] = await PaymentPlan.update({stage,charge},{where : { id : paymentPlanId}})
+        const [ result ] = await PaymentPlan.update(req.body,{where : { id : paymentPlanId}})
 
         if ( result == 1 ){
             const data = await PaymentPlan.findByPk(paymentPlanId,{attributes: ['id','projectId','stage', 'charge']} );

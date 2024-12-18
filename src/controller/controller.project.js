@@ -6,72 +6,17 @@ import Project from "../model/model.project.js";
 import ProjectDetail from "../model/model.projectDetails.js";
 import RoomConfiguration from "../model/model.roomConfiguration.js";
 import CustomError from "../utils/CustomError.js"
-import { validate } from "../utils/validation.js";
-import { addressSchema } from "../validation/project/validation.address.js";
-import { amenitySchema } from "../validation/project/validation.amenity.js";
-import { employeeSchema } from "../validation/project/validation.employee.js";
-import { paymentPlanSchema } from "../validation/project/validation.paymentPlan.js";
-import { projectSchema } from "../validation/project/validation.project.js";
-import { projectDetailSchema } from "../validation/project/validation.projectDetails.js";
-import { roomConfigurationSchema } from "../validation/project/validation.roomConfiguration.js";
+
+
 
 
 //creating a project
 const createProject = async (req,res,next)=>{
   
     const { project ,  address,  roomConfiguration, projectDetail , amenity , paymentPlan , siteEmployee } = req.body;
-
-    if ( !project , !address ,  !projectDetail  ){
-
-        return next( new CustomError( " Please fill all required field...",400));
-
-    }
-
-    const { projectName  , propertyType } = project; 
-
-    const { street1 , street2, city , state , country } = address; 
-
-    const {  room, floor, areaDetail, cost } = projectDetail;
-    
-    if ( !projectName || !propertyType || !street1 || !city  || !state  || !country 
-        || !room || !floor || !areaDetail || !cost  )
-    {
-            return next( new CustomError( " Please fill all required field..." , 400 ));
-    }
-
       
-    validate(next,projectSchema,project);
-    validate(next,addressSchema,address);
-    validate(next,projectDetailSchema,projectDetail);
+    const { projectName , propertyType } = project;
 
-    if( paymentPlan && paymentPlan.length > 0 ) {
-
-        for (const element of paymentPlan) {
-           validate(next,paymentPlanSchema,element);
-        }
-
-    }
-
-    if (roomConfiguration && roomConfiguration.length > 0) {
-
-        for (const element of roomConfiguration) {
-            validate(next, roomConfigurationSchema, element);
-        }
-    
-    }
-    
-    if (siteEmployee && siteEmployee.length > 0) {
-
-        for (const element of siteEmployee) {
-            validate(next, employeeSchema, element); 
-        }
-    
-    }
-
-    if ( amenity ){
-        validate(next,amenitySchema,amenity);
-    }
-    
     try {
 
         const existingProject =  await Project.findOne({ where: { projectName } });
@@ -161,6 +106,7 @@ const updateproject = async(req,res,next)=>{
         const project = await Project.findOne({
             where: { id: projectId },
             attributes: ['id','projectName', 'propertyType'] 
+            
         });
 
         if( projectName ){

@@ -1,7 +1,6 @@
 import Address from "../model/model.address.js";
 import CustomError from "../utils/CustomError.js";
-import { validate } from "../utils/validation.js";
-import { addressSchema } from "../validation/project/validation.address.js";
+
 
 // get  addresse based on project ID
 const getAddressByProjectId = async (req, res, next) => {
@@ -27,17 +26,11 @@ const getAddressByProjectId = async (req, res, next) => {
 const updateAddress = async (req, res, next) => {
 
     const { projectId } = req.params;
-    const { street1, street2, city, state, country } = req.body;
-
-    if (!street1 || !city || !state || !country) {
-        return next( new CustomError("please field all required field.",400));
-    }
-
-    validate(next,addressSchema,req.body);
+   
 
     try {
 
-        const [ result ] = await Address.update({ street1, street2, city, state, country }, { where: { projectId } });
+        const [ result ] = await Address.update(req.body, { where: { projectId } });
         
         if( result == 1 ){
 

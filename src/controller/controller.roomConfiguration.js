@@ -1,27 +1,18 @@
 import RoomConfiguration from "../model/model.roomConfiguration.js";
 import CustomError from "../utils/CustomError.js";
-import { validate } from "../utils/validation.js";
+
 import { roomConfigurationSchema } from "../validation/project/validation.roomConfiguration.js";
 
 
 
 // add payment plan
 const addRoom = async (req,res,next)=>{
-  
+
     const { projectId } = req.params;
-
-    const { roomType , bedroomNumber } = req.body; 
- 
-    if ( !roomType || !bedroomNumber  )
-    {
-        return next( new CustomError(" Please fill all required field",400));
-    }
-
-   validate(next,roomConfigurationSchema,req.body);
-
+  
     try {
 
-        let result =  await RoomConfiguration.create({roomType,bedroomNumber,projectId});
+        let result =  await RoomConfiguration.create({...req.body,projectId});
 
         const data = await RoomConfiguration.findByPk(result.id,{attributes: { exclude: ['updatedAt','createdAt'] }})
 
@@ -97,19 +88,11 @@ const updateRoom = async ( req,res,next)=>{
 
     const { roomId } = req.params;
 
-    const { roomType , bedroomNumber } = req.body;
-
-    if ( !roomType || !bedroomNumber  )
-        {
-            return next( new CustomError(" Please fill all required field",400));
-        }
-
-     validate(next,roomConfigurationSchema,req.body);
-    
+   
  
       try {
 
-        const [ result ] = await RoomConfiguration.update({roomType,bedroomNumber},{where : { id : roomId}})
+        const [ result ] = await RoomConfiguration.update(req.body,{where : { id : roomId}})
         
         if ( result == 1 ){
             const data = await RoomConfiguration.findByPk(roomId,{attributes: { exclude: ['updatedAt','createdAt'] }});

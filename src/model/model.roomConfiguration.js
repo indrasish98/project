@@ -9,7 +9,7 @@ const RoomConfiguration = sequelize.define(
         allowNull: false,
       },
       roomType: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull : false
       },
       bedroomNumber: {
