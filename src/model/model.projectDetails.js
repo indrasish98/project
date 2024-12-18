@@ -2,7 +2,7 @@ import {  DataTypes }  from 'sequelize';
 import sequelize from '../config/db.js';
 
 const projectDetail = sequelize.define(
-    'projectDetails',
+    'projectdetails',
     {
        projectId: {
         type: DataTypes.INTEGER,

@@ -1,22 +1,21 @@
 import PaymentPlan from "../model/model.paymentplan.js";
 import CustomError from "../utils/CustomError.js";
 
-import { paymentPlanSchema } from "../validation/project/validation.paymentPlan.js";
 
 
 
 // add payment plan
 const addPaymentPlan = async (req,res,next)=>{
 
-    const { projectId } = req.params;
+    const { planNameId } = req.params;
 
     try {
 
-        let result =  await PaymentPlan.create({...req.body,projectId});
+        let result =  await PaymentPlan.create({...req.body,planNameId});
 
         const data = await PaymentPlan.findOne({
             where: { id: result.id },
-            attributes: ['id','projectId','stage', 'charge'] 
+            attributes: ['id','planNameId','stage', 'charge'] 
         });
 
        
@@ -64,18 +63,18 @@ const deletePaymentPlan = async (req,res,next)=>{
 //get all payment plan on the basis of particular project Id 
 const getPaymentPlanByProjectId = async ( req,res,next)=>{
 
-    const { projectId } = req.params;
+    const { planNameId } = req.params;
  
       try {
 
         const data = await PaymentPlan.findAll({
-            where: { projectId },
-            attributes: ['id','projectId','stage', 'charge'] 
+            where: { planNameId },
+            attributes: ['id','planNameId','stage', 'charge'] 
         });
         
         return res.status(200).json({
             success : true,
-            message : 'fetching all payment plans for this project.',
+            message : 'fetching all payment plans for this plan name.',
             data 
         })
 
@@ -97,7 +96,7 @@ const updatePaymentPlan = async ( req,res,next)=>{
         const [ result ] = await PaymentPlan.update(req.body,{where : { id : paymentPlanId}})
 
         if ( result == 1 ){
-            const data = await PaymentPlan.findByPk(paymentPlanId,{attributes: ['id','projectId','stage', 'charge']} );
+            const data = await PaymentPlan.findByPk(paymentPlanId,{attributes: ['id','planNameId','stage', 'charge']} );
             return res.status(200).json({
                 success : true,
                 message : 'successfully updated payment plan...',

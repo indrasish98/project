@@ -9,8 +9,8 @@ import { paymentPlanValidation } from "../middleware/validatonMiddleware/middlew
 
 const paymentPlanRoute = Router();
 
-paymentPlanRoute.post('/add/:projectId',paymentPlanValidation,addPaymentPlan);
-paymentPlanRoute.get('/get/:projectId',getPaymentPlanByProjectId);
+paymentPlanRoute.post('/add/:planNameId',paymentPlanValidation,addPaymentPlan);
+paymentPlanRoute.get('/get/:planNameId',getPaymentPlanByProjectId);
 paymentPlanRoute.delete('/delete/:paymentPlanId',deletePaymentPlan);
 paymentPlanRoute.put('/update/:paymentPlanId',paymentPlanValidation,updatePaymentPlan);
 

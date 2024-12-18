@@ -2,9 +2,9 @@ import {  DataTypes }  from 'sequelize';
 import sequelize from '../config/db.js';
 
 const PaymentPlan = sequelize.define(
-    'paymentPlans',
+    'paymentplans',
     {
-       projectId: {
+       planNameId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
