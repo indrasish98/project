@@ -1,7 +1,4 @@
 import Employee from "../model/model.employee.js";
-import CustomError from "../utils/CustomError.js";
-
-import { employeeSchema } from "../validation/project/validation.employee.js";
 
 // add employee
 const addEmployee = async (req, res, next) => {

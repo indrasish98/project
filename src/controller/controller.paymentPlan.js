@@ -120,8 +120,14 @@ const updatePaymentPlan = async ( req,res,next)=>{
 
 
 export {
+
     addPaymentPlan,
     deletePaymentPlan,
     updatePaymentPlan,
     getPaymentPlanByProjectId
+    
 }
+
+
+
+
