@@ -1,3 +1,4 @@
+import sequelize from "../config/db.js";
 import Address from "../model/model.address.js";
 import Amenity from "../model/model.amenity.js";
 import Employee from "../model/model.employee.js";
@@ -18,6 +19,9 @@ const createProject = async (req,res,next)=>{
       
     const { projectName , propertyType } = project;
 
+    const t = await sequelize.transaction();
+
+
     try {
 
         const existingProject =  await Project.findOne({ where: { projectName } });
@@ -28,18 +32,19 @@ const createProject = async (req,res,next)=>{
 
         }
 
-        const project = await Project.create({projectName,propertyType});
+        const project = await Project.create({projectName,propertyType},{transaction : t});
         
         const data = await Project.findOne({
             where: { id: project.id },
-            attributes: ['id','projectName','propertyType'] 
+            attributes: ['id','projectName','propertyType'] ,
+            transaction : t
         });
 
-        await Address.create({...address,projectId : project.id});
+        await Address.create({...address,projectId : project.id},{ transaction : t });
 
-        await ProjectDetail.create({...projectDetail,projectId : project.id});
+        await ProjectDetail.create({...projectDetail,projectId : project.id},{ transaction : t });
 
-        await Amenity.create({...amenity,projectId : project.id});
+        await Amenity.create({...amenity,projectId : project.id} , { transaction : t });
       
         if( planName && planName.length > 0 ) {
 
@@ -50,7 +55,7 @@ const createProject = async (req,res,next)=>{
                 modifiedPaymentPlan.push(plan);
             }
 
-            await PlanName.bulkCreate(modifiedPaymentPlan);
+            await PlanName.bulkCreate(modifiedPaymentPlan,{transaction : t});
         }
 
         if( roomConfiguration && roomConfiguration.length > 0 ) {
@@ -62,7 +67,7 @@ const createProject = async (req,res,next)=>{
                 modifiedRoomConfiguration.push(room);
             }
 
-            await RoomConfiguration.bulkCreate(modifiedRoomConfiguration);
+            await RoomConfiguration.bulkCreate(modifiedRoomConfiguration,{ transaction : t });
         }
 
         if( siteEmployee && siteEmployee.length > 0 ) {
@@ -74,8 +79,10 @@ const createProject = async (req,res,next)=>{
                 modifiedSiteEmployee.push(employee);
             }
 
-            await Employee.bulkCreate(modifiedSiteEmployee);
+            await Employee.bulkCreate(modifiedSiteEmployee,{ transaction : t });
         }
+
+        await t.commit();
 
         return res.status(200).json({
             success : true,
@@ -86,7 +93,9 @@ const createProject = async (req,res,next)=>{
 
     } catch (error) {
 
+        await t.rollback();
         console.log("the error is : ",error);
+        next( new CustomError("Sorry! project is not created.",400));
         
     }
 }
@@ -153,7 +162,20 @@ const fetchProjectByProjectId = async(req,res,next)=>{
 
     try {
 
-        const data = await Project.findByPk(projectId,{attributes:['id','projectName','propertyType']})
+        const { id , projectName,propertyType, address }  = await Project.findByPk(projectId,{include:[Address]});
+        
+        const data = {
+            id ,
+            projectName ,
+            propertyType ,
+            street1 : address.street1,
+            street2 : address.street2,
+            city : address.city,
+            state : address.state,
+            country : address.country,
+        }
+        
+
 
         return res.status(200).json({
             success : true,
@@ -168,31 +190,39 @@ const fetchProjectByProjectId = async(req,res,next)=>{
     }
 }
 
-const deleteProjectByProjectId = async(req,res,next)=>{
+
+// project deleted 
+const deleteProjectByProjectId = async (req, res, next) => {
 
     const { projectId } = req.params;
 
+    let t = await sequelize.transaction();
+
     try {
         
-        await Project.destroy({where:{id:projectId}});
-        await Address.destroy({where:{projectId}});
-        await Amenity.destroy({where:{projectId}});
-        await ProjectDetail.destroy({where:{projectId}});
-        await Employee.destroy({where:{projectId}});
-        await PlanName.destroy({where:{projectId}});
-        await PaymentPlan.destroy({where:{projectId}});
+
+        await Project.destroy({ where: { id: projectId } , transaction: t });
+        await Address.destroy({ where: { projectId } ,  transaction: t });
+        await Amenity.destroy({ where: { projectId } ,  transaction: t });
+        await ProjectDetail.destroy({ where: { projectId } ,  transaction: t });
+        await Employee.destroy({ where: { projectId } ,  transaction: t });
+        await PlanName.destroy({ where: { projectId } ,  transaction: t });
+        await PaymentPlan.destroy({ where: { projectId } ,  transaction: t });
+
+        await t.commit();
 
         res.status(200).json({
-            success : true,
-            message : " project deleted successfully."
-        })
-
+            success: true,
+            message: "Project deleted successfully."
+        });
     } catch (error) {
 
-        console.log("the error is : ",error);
-        
+        await t.rollback();
+
+        next( new CustomError(" Sorry! projecct not deleted successfully.",400))
+
     }
-}
+};
 
 export {
     createProject,
@@ -200,3 +230,8 @@ export {
     fetchProjectByProjectId,
     deleteProjectByProjectId
 }
+
+
+
+
+

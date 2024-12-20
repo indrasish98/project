@@ -9,7 +9,9 @@ export const createPlanName = async ( req,res,next)=>{
     try {
         
         const result = await PlanName.create({...req.body,projectId});
+
         const data = await PlanName.findByPk(result.id,{attributes:['id','projectId','planName']});
+
         res.status(200).json({
             success : true,
             message : 'successfully created plan name',
@@ -17,6 +19,8 @@ export const createPlanName = async ( req,res,next)=>{
         })
 
      } catch (error) {
+        
+        console.log('the error is : ',error);
         
      }
 }
@@ -49,7 +53,6 @@ export const deleteParticularPlanName = async ( req,res,next)=>{
 
     try {
         
-      
          await PlanName.destroy({where:{id:planNameId}});
          await PaymentPlan.destroy({where:{planNameId}});
         
@@ -59,6 +62,8 @@ export const deleteParticularPlanName = async ( req,res,next)=>{
         })
 
      } catch (error) {
+        
+        console.log("the error is : ",error);
         
      }
 }
@@ -70,7 +75,6 @@ export const updatePlanName = async ( req,res,next)=>{
 
     try {
         
-      
          const [ result ] = await PlanName.update(req.body,{where:{id:planNameId}});
 
          if( result == 1){
@@ -90,6 +94,8 @@ export const updatePlanName = async ( req,res,next)=>{
         
 
      } catch (error) {
+        
+        console.log('the error is : ',error);
         
      }
 }

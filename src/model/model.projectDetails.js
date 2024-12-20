@@ -1,7 +1,7 @@
 import {  DataTypes }  from 'sequelize';
 import sequelize from '../config/db.js';
 
-const projectDetail = sequelize.define(
+const ProjectDetail = sequelize.define(
     'projectdetails',
     {
        projectId: {
@@ -32,5 +32,5 @@ const projectDetail = sequelize.define(
     },
   );
 
-  export default projectDetail;
+  export default ProjectDetail;
   
