@@ -3,7 +3,7 @@ import envVariable from "./config/envConfig.js";
 import sequelize from "./config/db.js";
 
 
-const PORT = envVariable.PORT || 5000;
+const PORT = envVariable.PORT || 8080;
 
 sequelize.sync().then(()=>{
     console.log("databases connected successfully...");

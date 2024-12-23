@@ -204,4 +204,21 @@ export const planNameValidation = async(req,res,next)=>{
 }
 
 
+export const projectDetailValidation = async(req,res,next)=>{
+
+    const  { error } =  projectDetailSchema.validate(req.body);
+
+    if ( error ){
+        
+        const errorMessage = error.details[0].message;
+        const message = makeClearMessage(errorMessage);
+        return next( new CustomError(message,400));
+         
+    }
+
+    next();
+    
+}
+
+
 
