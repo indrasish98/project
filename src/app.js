@@ -8,6 +8,7 @@ import employeeRoute from "./route/route.employee.js";
 import roomConfigurationRoute from "./route/route.roomConfiguration.js";
 import planNameRouter from "./route/route.planName.js";
 import morgan from "morgan";
+import projectDetailRoute from "./route/route.projectDetail.js";
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use('/api/amenity',amenityRoute);
 app.use('/api/employee',employeeRoute);
 app.use('/api/room',roomConfigurationRoute);
 app.use('/api/plan-name',planNameRouter);
+app.use('/api/project-detail',projectDetailRoute);
 
 
 app.use(errorMiddleware);
